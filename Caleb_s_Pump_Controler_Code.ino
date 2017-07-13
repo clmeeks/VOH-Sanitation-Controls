@@ -1,13 +1,13 @@
 
-long dosingtimeON = 200; // Controls how long of a runtime both dosing pumps have.
-long dosingtimeOFF = 800; // Controls how long of a break is taken between doses for both dosing pumps.
-int dosingalternator = 1; // Used to alternaite between dosing pumps 1 and 2 as the start pump in a cycle. This is done to balance the effects of the delay after the input pump runs. 
-long dosingdelay = 0; // Later used to calculate the gaps between the dosing pumps using the equiation dosingdelay = dosingdelay = (dosingtimeOFF-dosingtimeON)/2
+long dosingtimeON = 200;                                           // Controls how long of a runtime both dosing pumps have.
+long dosingtimeOFF = 800;                                          // Controls how long of a break is taken between doses for both dosing pumps.
+int dosingalternator = 1;                                          // Used to alternaite between dosing pumps 1 and 2 as the start pump in a cycle. This is done to balance the effects of the delay after the input pump runs. 
+long dosingdelay = 0;                                              // Later used to calculate the gaps between the dosing pumps using the equiation dosingdelay = dosingdelay = (dosingtimeOFF-dosingtimeON)/2
 
 long inputtimeON = 400;                                            // Controls how long the input pump runs for
 long inputtimeOFF = 800;                                           // Controls how long of a break there is after the input pump runs
-int inputratio = 3;                                                  // Controls the ratio of input pump to dosing pump cycles. For example a ratio of 3 means that input pump will run once for every three cycles of dosing pumps
-int ratiocount = 0;                                                  // Used to advance the dosing cycle reletive to the inputratio.
+int inputratio = 3;                                                // Controls the ratio of input pump to dosing pump cycles. For example a ratio of 3 means that input pump will run once for every three cycles of dosing pumps
+int ratiocount = 0;                                                // Used to advance the dosing cycle reletive to the inputratio.
 
 long sludgetimeON = 500;                                           // controls how long the sludge pump runs for when it is on
 long sludgetimeOFF = 6000;                                         // controls how long the sludge pump is scheduled wait before kicking back on
@@ -40,14 +40,25 @@ void loop()
 dosingdelay = (dosingtimeOFF-dosingtimeON)/2;                        // Defines the delay time between the dosing pumps using dosingtimeOFF and dosingtimeON variables.
 internaltime = millis();                                             // Updates internaltime variable with the arduino's current time.
 
-if(1 + internaltime < armageddoncheck && internaltime == 0)            // When the interal timer resets to 0 this makes ure the sludgetargettime and targettime variables are reletive to the actual 
+if(internaltime >= 10000)
+{
+  internaltime = internaltime - 10000;
+}
+
+if(1 + internaltime < armageddoncheck && internaltime == 0)            // When the interal timer resets to 0 this makes ure the sludgetargettime and targettime variables are reletive to the actual internal time.
 {
 sludgetargettime = sludgetargettime - armageddoncheck;
 targettime = targettime - armageddoncheck;
 }
 
-armageddoncheck = millis();
-                                                                        // When the system boots up it starts out by running the sludge pump for sludgetimeON
+armageddoncheck = millis();                                           // Updates armageddoncheck with the current inernal time so that the above code can check if the interal clock has reset to 0.
+
+if(armageddoncheck >= 10000)
+{
+  armageddoncheck = armageddoncheck - 10000;
+}
+                                                                 
+                                                                         // When the system boots up it starts out by running the sludge pump for sludgetimeON
   
   if(sludgestage == 0 && stage == 0 || sludgetargettime > internaltime)  // Runs sluge pump for duration of sludgetimeON as soon as the dosing pumps finish a cyle and are not running.
   {
@@ -192,6 +203,5 @@ digitalWrite(13,dosing1state);                                     // Turns Dosi
 digitalWrite(12,dosing2state);                                     // Turns Dosing Pump 2 on and off by setting digital pin 12 to HIGH or LOW depending on the variable dosing2state.
 digitalWrite(11,inputstate);                                       // Turns Input Pump on and off by setting digital pin 11 to HIGH or LOW depending on the variable inputstate.
 digitalWrite(10,sludgestate);                                      // Turns Sludge Pump on and off by setting digital pin 10 to HIGH or LOW depending on the variable sludgestate.
-
 
 }
