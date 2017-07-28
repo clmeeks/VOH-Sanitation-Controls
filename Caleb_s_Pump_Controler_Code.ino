@@ -1,16 +1,16 @@
 
-long dosingtimeON = 200;                                           // Controls how long of a runtime both dosing pumps have.
-long dosingtimeOFF = 800;                                          // Controls how long of a break is taken between doses for both dosing pumps.
+long dosingtimeON = 5000;                                           // Controls how long of a runtime both dosing pumps have.
+long dosingtimeOFF = 15000;                                          // Controls how long of a break is taken between doses for both dosing pumps.
 int dosingalternator = 1;                                          // Used to alternaite between dosing pumps 1 and 2 as the start pump in a cycle. This is done to balance the effects of the delay after the input pump runs. 
 long dosingdelay = 0;                                              // Later used to calculate the gaps between the dosing pumps using the equiation dosingdelay = dosingdelay = (dosingtimeOFF-dosingtimeON)/2
 
-long inputtimeON = 400;                                            // Controls how long the input pump runs for
-long inputtimeOFF = 800;                                           // Controls how long of a break there is after the input pump runs
+long inputtimeON = 10000;                                            // Controls how long the input pump runs for
+long inputtimeOFF = 15000;                                           // Controls how long of a break there is after the input pump runs
 int inputratio = 3;                                                // Controls the ratio of input pump to dosing pump cycles. For example a ratio of 3 means that input pump will run once for every three cycles of dosing pumps
 int ratiocount = 0;                                                // Used to advance the dosing cycle reletive to the inputratio.
 
-long sludgetimeON = 500;                                           // controls how long the sludge pump runs for when it is on
-long sludgetimeOFF = 6000;                                         // controls how long the sludge pump is scheduled wait before kicking back on
+long sludgetimeON = 30000;                                           // controls how long the sludge pump runs for when it is on
+long sludgetimeOFF = 300000;                                         // controls how long the sludge pump is scheduled wait before kicking back on
 
 int dosing1state = LOW;                                              // changes the on or off state of dosing pump 1, HIGH = ON and LOW = OFF
 int dosing2state = LOW;                                              // changes the on or off state of dosing pump 2, HIGH = ON and LOW = OFF
@@ -196,7 +196,7 @@ if(armageddoncheck >= 10000)
   }
   else
   {
-  sludgestage = 0;                                                 // This kicks allows the sludge pump to run once the sludgetimeOFF time is up.
+  sludgestage = 0;                                                 // This allows the sludge pump to run once the sludgetimeOFF time is up.
   }
 
 digitalWrite(13,dosing1state);                                     // Turns Dosing Pump 1 on and off by setting digital pin 13 to HIGH or LOW depending on the variable dosing1state.
